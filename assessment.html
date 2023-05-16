@@ -150,7 +150,7 @@
   currentIndex++;
 
   // Skip the second question if the age is under 18
-  if (currentIndex === 1 && Number(selectedAnswers[0]) < 18) {
+  if (currentIndex === 2 && Number(selectedAnswers[0]) < 18) {
     selectedAnswers.push("Skipped");
     currentIndex++;
   }
