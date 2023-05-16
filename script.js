@@ -72,10 +72,12 @@ function displayQuestion() {
 // Function to handle the next question
 function nextQuestion() {
   var answerElement = document.getElementById("answer");
-  var selectedAnswer = answerElement.value;
+  var selectedOptions = Array.from(answerElement.selectedOptions).map(function(option) {
+    return option.value;
+  });
 
   // Store the selected answer
-  selectedAnswers.push(selectedAnswer);
+  selectedAnswers.push(selectedOptions);
 
   // Move to the next question
   currentIndex++;
