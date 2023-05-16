@@ -1,17 +1,90 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Questionnaire</title>
-</head>
-<body>
-  <h1>Questionnaire</h1>
-  <div id="questionContainer">
-    <p id="question"></p>
-    <select id="answer" multiple></select>
-    <button onclick="nextQuestion()">Next</button>
-  </div>
+  <head>
+    <title>Survey Questions</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="surveyContainer">
+      <h1 id="question"></h1>
+      <select id="answer" multiple></select>
+      <button onclick="nextQuestion()">Next</button>
+    </div>
+    <div id="resultsContainer" style="display: none;">
+      <h1>Results:</h1>
+      <pre id="results"></pre>
+    </div>
+    <script>
+      var questions = [/*Your question array goes here*/];
 
-  <script src="script.js"></script>
-</body>
+      var currentIndex = 0;
+      var selectedAnswers = [];
+
+      function displayQuestion() {
+        var question = questions[currentIndex];
+        var questionElement = document.getElementById("question");
+        var answerElement = document.getElementById("answer");
+
+        questionElement.textContent = question.question;
+        answerElement.innerHTML = "";
+
+        if (question.type === "multiSelect") {
+          for (var i = 0; i < question.properties.options.length; i++) {
+            var option = question.properties.options[i];
+            var optionElement = document.createElement("option");
+            optionElement.value = option.value;
+            optionElement.textContent = option.label;
+            answerElement.appendChild(optionElement);
+          }
+        } else if (question.type === "singleSelect") {
+          var defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "Select an option";
+          defaultOption.disabled = true;
+          defaultOption.selected = true;
+          answerElement.appendChild(defaultOption);
+          for (var i = 0; i < question.properties.options.length; i++) {
+            var option = question.properties.options[i];
+            var optionElement = document.createElement("option");
+            optionElement.value = option.value;
+            optionElement.textContent = option.label;
+            answerElement.appendChild(optionElement);
+          }
+        }
+      }
+
+      function nextQuestion() {
+        var answerElement = document.getElementById("answer");
+        var selectedOptions = Array.from(answerElement.options)
+          .filter(option => option.selected)
+          .map(option => option.value);
+
+        selectedAnswers.push(selectedOptions);
+
+        currentIndex++;
+
+        if (currentIndex >= questions.length) {
+          displayResults();
+        } else {
+          displayQuestion();
+        }
+      }
+
+      function displayResults() {
+        var resultsElement = document.getElementById("results");
+        var surveyContainer = document.getElementById("surveyContainer");
+        var resultsContainer = document.getElementById("resultsContainer");
+
+        resultsElement.textContent = JSON.stringify(selectedAnswers, null, 2);
+        surveyContainer.style.display = "none";
+        resultsContainer.style.display = "block";
+      }
+
+      displayQuestion();
+    </script>
+  </body>
 </html>
-
