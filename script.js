@@ -74,10 +74,6 @@ var questions = [
   }
 ];
 
-// Variables
-var currentIndex = 0;
-var selectedAnswers = [];
-
 // Function to display the current question
 function displayQuestion() {
   var question = questions[currentIndex];
@@ -91,48 +87,28 @@ function displayQuestion() {
   answerElement.innerHTML = "";
 
   // Create and append options
-  for (var i = 0; i < question.properties.options.length; i++) {
-    var option = question.properties.options[i];
-    var optionElement = document.createElement("option");
-    optionElement.value = option.value;
-    optionElement.textContent = option.label;
-    answerElement.appendChild(optionElement);
-  }
-}
-
-// Function to handle the next question
-function nextQuestion() {
-  var answerElement = document.getElementById("answer");
-  var selectedOptions = Array.from(answerElement.selectedOptions).map(function(option) {
-    return option.value;
-  });
-
-  // Store the selected answer
-  selectedAnswers.push(selectedOptions);
-
-  // Move to the next question
-  currentIndex++;
-
-  // If all questions are answered, display the results
-  if (currentIndex >= questions.length) {
-    displayResults();
-  } else {
-    displayQuestion();
-  }
-}
-
-// Function to display the results
-function displayResults() {
-  // Clear the question container
-  var questionContainer = document.getElementById("questionContainer");
-  questionContainer.innerHTML = "";
-
-  // Display the selected answers
-  var resultsElement = document.createElement("p");
-  resultsElement.textContent = "Selected answers: " + selectedAnswers.join(", ");
-  questionContainer.appendChild(resultsElement);
-}
-
-// Display the first question
-displayQuestion();
-
+  if (question.type === "multiSelect") {
+    answerElement.multiple = true;
+    for (var i = 0; i < question.properties.options.length; i++) {
+      var option = question.properties.options[i];
+      var optionElement = document.createElement("option");
+      optionElement.value = option.value;
+      optionElement.textContent = option.label;
+      answerElement.appendChild(optionElement);
+    }
+  } else if (question.type === "singleSelect") {
+    answerElement.multiple = false;
+    var defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Select an option";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    answerElement.appendChild(defaultOption);
+    for (var i = 0; i < question.properties.options.length; i++) {
+      var option = question.properties.options[i];
+      var optionElement = document.createElement("option");
+      optionElement.value = option.value;
+      optionElement.textContent = option.label;
+      answerElement.appendChild(optionElement);
+    }
+ 
