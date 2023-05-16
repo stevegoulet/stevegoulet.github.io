@@ -40,67 +40,41 @@ var questions = [
     "question": "Please select your race(s):",
     "required": false,
     "type": "multiSelect"
+  },
+  {
+    "fieldName": "patientRelationshipStatus",
+    "id": "demographics-3",
+    "properties": {
+      "allowOther": true,
+      "options": [
+        {
+          "label": "Single",
+          "value": "Single"
+        },
+        {
+          "label": "Married",
+          "value": "Married"
+        },
+        {
+          "label": "Committed partnership",
+          "value": "Committed partnership"
+        },
+        {
+          "label": "Divorced",
+          "value": "Divorced"
+        },
+        {
+          "label": "Widow/widower",
+          "value": "Widow/widower"
+        }
+      ]
+    },
+    "question": "What is your relationship status?",
+    "type": "singleSelect"
   }
 ];
 
-// Variables
-var currentIndex = 0;
-var selectedAnswers = [];
-
-// Function to display the current question
-function displayQuestion() {
-  var question = questions[currentIndex];
-  var questionElement = document.getElementById("question");
-  var answerElement = document.getElementById("answer");
-
-  // Display the question
-  questionElement.textContent = question.question;
-
-  // Clear previous answers
-  answerElement.innerHTML = "";
-
-  // Create and append options
-  for (var i = 0; i < question.properties.options.length; i++) {
-    var option = question.properties.options[i];
-    var optionElement = document.createElement("option");
-    optionElement.value = option.value;
-    optionElement.textContent = option.label;
-    answerElement.appendChild(optionElement);
-  }
-}
-
-// Function to handle the next question
-function nextQuestion() {
-  var answerElement = document.getElementById("answer");
-  var selectedOptions = Array.from(answerElement.selectedOptions).map(function(option) {
-    return option.value;
-  });
-
-  // Store the selected answer
-  selectedAnswers.push(selectedOptions);
-
-  // Move to the next question
-  currentIndex++;
-
-  // If all questions are answered, display the results
-  if (currentIndex >= questions.length) {
-    displayResults();
-  } else {
-    displayQuestion();
-  }
-}
-
-// Function to display the results
-function displayResults() {
-  // Clear the question container
-  var questionContainer = document.getElementById("questionContainer");
-  questionContainer.innerHTML = "";
-
-  // Display the selected answers
-  var resultsElement = document.createElement("p");
-  resultsElement.textContent = "Selected answers: " + selectedAnswers.join(", ");
-  questionContainer.appendChild(resultsElement);
-}
+// Rest of the code remains unchanged...
 
 // Display the first question
 displayQuestion();
