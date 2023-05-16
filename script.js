@@ -118,4 +118,21 @@ function displayQuestion() {
 
 // Function to handle the next question
 function nextQuestion() {
-  var answerElement =
+  var answerElement = document.getElementById("answer");
+  var selectedOptions = Array.from(answerElement.options)
+    .filter(option => option.selected)
+    .map(option => option.value);
+
+  // Store the selected answer
+  selectedAnswers.push(selectedOptions);
+
+  // Move to the next question
+  currentIndex++;
+
+  // If all questions are answered, display the results
+  if (currentIndex >= questions.length) {
+    displayResults();
+  } else {
+    displayQuestion();
+  }
+}
