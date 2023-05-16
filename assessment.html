@@ -114,73 +114,64 @@
 
         questionElement.textContent = question.question;
         answerElement.innerHTML = "";
-
-        if (question.type === "multiSelect") {
-          for (var i = 0; i < question.properties.options.length; i++) {
-            var option = question.properties.options[i];
-            var optionElement = document.createElement("option");
-            optionElement.value = option.value;
-            optionElement.textContent = option.label;
-            answerElement.appendChild(optionElement);
-          }
-        } else if (question.type === "singleSelect") {
-          var defaultOption = document.createElement("option");
-          defaultOption.value = "";
-          defaultOption.textContent = "Select an option";
-          defaultOption.disabled = true;
-          defaultOption.selected = true;
-          answerElement.appendChild(defaultOption);
-          for (var i = 0; i < question.properties.options.length; i++) {
-            var option = question.properties.options[i];
-            var optionElement = document.createElement("option");
-            optionElement.value = option.value;
-            optionElement.textContent = option.label;
-            answerElement.appendChild(optionElement);
-          }
-        }
+            if (question.type === "multiSelect") {
+      for (var i = 0; i < question.properties.options.length; i++) {
+        var option = question.properties.options[i];
+        var optionElement = document.createElement("option");
+        optionElement.value = option.value;
+        optionElement.textContent = option.label;
+        answerElement.appendChild(optionElement);
       }
-
-      function nextQuestion() {
-      var answerElement = document.getElementById("answer");
-      var selectedOptions = Array.from(answerElement.options)
-        .filter(option => option.selected)
-        .map(option => option.value);
-
-      selectedAnswers.push(selectedOptions);
-
-      currentIndex++;
-
-      // Skip the second question if the age is under 18
-      if (currentIndex === 1 && Number(selectedAnswers[0]) < 18) {
-        selectedAnswers.push("Skipped");
-        currentIndex++;
-      }
-
-      if (currentIndex >= questions.length) {
-        displayResults();
-      } else {
-        displayQuestion();
+    } else if (question.type === "singleSelect") {
+      var defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "Select an option";
+      defaultOption.disabled = true;
+      defaultOption.selected = true;
+      answerElement.appendChild(defaultOption);
+      for (var i = 0; i < question.properties.options.length; i++) {
+        var option = question.properties.options[i];
+        var optionElement = document.createElement("option");
+        optionElement.value = option.value;
+        optionElement.textContent = option.label;
+        answerElement.appendChild(optionElement);
       }
     }
+  }
 
-      
-      if (currentIndex >= questions.length) {
-        displayResults();
-      } else {
-        displayQuestion();
-      }
-        
-      function displayResults() {
-        var resultsElement = document.getElementById("results");
-        var surveyContainer = document.getElementById("surveyContainer");
-        var resultsContainer = document.getElementById("resultsContainer");
+  function nextQuestion() {
+  var answerElement = document.getElementById("answer");
+  var selectedOptions = Array.from(answerElement.options)
+    .filter(option => option.selected)
+    .map(option => option.value);
 
-        resultsElement.textContent = JSON.stringify(selectedAnswers, null, 2);
-        surveyContainer.style.display = "none";
-        resultsContainer.style.display = "block";
-      }
+  selectedAnswers.push(selectedOptions);
 
-      displayQuestion();
-    </script>
-  </body>
-</html>
+  currentIndex++;
+
+  // Skip the second question if the age is under 18
+  if (currentIndex === 1 && Number(selectedAnswers[0]) < 18) {
+    selectedAnswers.push("Skipped");
+    currentIndex++;
+  }
+
+  if (currentIndex >= questions.length) {
+    displayResults();
+  } else {
+    displayQuestion();
+  }
+  }
+    
+  function displayResults() {
+    var resultsElement = document.getElementById("results");
+    var surveyContainer = document.getElementById("surveyContainer");
+    var resultsContainer = document.getElementById("resultsContainer");
+
+    resultsElement.textContent = JSON.stringify(selectedAnswers, null, 2);
+    surveyContainer.style.display = "none";
+    resultsContainer.style.display = "block";
+  }
+
+  displayQuestion();
+</script>
+
