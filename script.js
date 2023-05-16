@@ -74,6 +74,10 @@ var questions = [
   }
 ];
 
+// Variables
+var currentIndex = 0;
+var selectedAnswers = [];
+
 // Function to display the current question
 function displayQuestion() {
   var question = questions[currentIndex];
@@ -88,7 +92,6 @@ function displayQuestion() {
 
   // Create and append options
   if (question.type === "multiSelect") {
-    answerElement.multiple = true;
     for (var i = 0; i < question.properties.options.length; i++) {
       var option = question.properties.options[i];
       var optionElement = document.createElement("option");
@@ -97,7 +100,6 @@ function displayQuestion() {
       answerElement.appendChild(optionElement);
     }
   } else if (question.type === "singleSelect") {
-    answerElement.multiple = false;
     var defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "Select an option";
@@ -111,4 +113,9 @@ function displayQuestion() {
       optionElement.textContent = option.label;
       answerElement.appendChild(optionElement);
     }
- 
+  }
+}
+
+// Function to handle the next question
+function nextQuestion() {
+  var answerElement =
