@@ -143,18 +143,26 @@
       function nextQuestion() {
       var answerElement = document.getElementById("answer");
       var selectedOptions = Array.from(answerElement.options)
-      .filter(option => option.selected)
-      .map(option => option.value);
+        .filter(option => option.selected)
+        .map(option => option.value);
 
       selectedAnswers.push(selectedOptions);
 
       currentIndex++;
 
       // Skip the second question if the age is under 18
-      if (currentIndex === 1 && selectedAnswers[0] < 18) {
+      if (currentIndex === 1 && Number(selectedAnswers[0]) < 18) {
         selectedAnswers.push("Skipped");
         currentIndex++;
       }
+
+      if (currentIndex >= questions.length) {
+        displayResults();
+      } else {
+        displayQuestion();
+      }
+    }
+
       
       if (currentIndex >= questions.length) {
         displayResults();
