@@ -99,7 +99,7 @@ function displayQuestion() {
       optionElement.textContent = option.label;
       answerElement.appendChild(optionElement);
     }
-  } else if (question.type === "singleSelect") {
+    else if (question.type === "singleSelect") {
     var defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "Select an option";
