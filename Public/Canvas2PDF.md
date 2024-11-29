@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 https://forum.obsidian.md/t/exporting-canvas-to-html-and-pdf/60331
 ---
 
