@@ -1,5 +1,5 @@
 https://forum.obsidian.md/t/exporting-canvas-to-html-and-pdf/60331
----
+
 
 First, open your canvas in Obsidian and zoom/pan to whatever view you want to export. Then open Developer Tools and run this script:
 
