@@ -1,3 +1,3 @@
-[Link](https://cnn.com)
+[Link](index.md)
 Here is my index
 WTF
