@@ -5,6 +5,7 @@ I am a healthcare technology executive with extensive product management experie
 
 In my role at [Mentavi](https://mentavi.com) I lead the design, engineering and delivery of innovative B2B and D2C behavioral healthcare products, along with our AI driven analytics initiatives.  
 
-![[images/headshot.png]]
+![screenshot](images/steve-headshot.png)
+
 
 
