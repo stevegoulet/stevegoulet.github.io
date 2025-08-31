@@ -6,6 +6,9 @@ permalink: /test/
 here is the content with a permalink property in front matter
 
 
+<script src="/assets/js/custom.js">
+
+
     <div id="root"></div>
     <script type="module">
         import AiriaChat from "https://chat.airia.ai/api/get-chat-embed"
@@ -18,6 +21,6 @@ here is the content with a permalink property in front matter
                         imageBgColor: "#FFFFFF"})
     </script>
 
-
+</script>
 
 
