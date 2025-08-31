@@ -7,8 +7,17 @@ TESTING ONLY: ZD POC
 
 To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
 
-<div id="root"></div>
+<style>
+.chat-window {
+  max-width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+</style>
 
+
+<div id="root"></div>
+<div class="chat-window">
 <script type="module">
   import AiriaChat from "https://chat.airia.ai/api/get-chat-embed";
 
@@ -21,6 +30,7 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
     imageSize: "small",
     imageBgColor: "#FFFFFF"
   });
+  </div>
 </script>
 
 
