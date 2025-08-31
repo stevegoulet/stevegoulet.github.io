@@ -15,7 +15,7 @@ TESTING ONLY: ZD POC
     apiKey: "ak-MjQzMzQ2Nzk1OXwxNzU2Njc4MTE5ODI4fHRpLVRXVnVkR0YyYVNCSVpXRnNkR2d0VDNCbGJpQlNaV2RwYzNSeVlYUnBiMjR0VUhKdlptVnpjMmx2Ym1Gc3wxfDEwMDM4NDI4NSAg",
     apiUrl: "https://embed-api.airia.ai",
     greeting: "Hello! How can I assist you today?",
-    imagePath: "images/logo-header.png",
+    imagePath: "/images/logo-header.png",
     imageSize: "small",
     imageBgColor: "#FFFFFF"
   });
