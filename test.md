@@ -5,6 +5,8 @@ permalink: /test/
 
 TESTING ONLY: ZD POC
 
+To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
+
 <div id="root"></div>
 
 <script type="module">
