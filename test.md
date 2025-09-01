@@ -9,50 +9,118 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
 
 
 <style>
-/* never let the page create horizontal scroll */
-html, body { width:100%; overflow-x:hidden; }
-
-/* target only YOUR wrapper — do NOT touch #root */
-.chat-window {
-  box-sizing: border-box;
-  /* keep it part of the normal flow; the SDK will float/dock the widget */
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow: visible;
+/* Prevent horizontal scroll on page */
+html, body { 
+  width: 100%; 
+  overflow-x: hidden; 
+  margin: 0;
+  padding: 0;
 }
 
-/* whatever the embed injects (iframe, divs), keep them fluid */
-.chat-window iframe,
-.chat-window > * {
-  display: block;
-  width: 100%;
+/* Ensure main content doesn't cause overflow */
+.wrapper {
   max-width: 100%;
-  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-/* belt-and-suspenders: long URLs/strings won't force overflow */
-.chat-window, .chat-window * {
+/* Target Airia chat elements directly */
+iframe[src*="airia"],
+[class*="airia"], 
+[id*="airia"] {
+  box-sizing: border-box !important;
+  max-width: 100vw !important;
   word-break: break-word;
 }
 
-/* tiny screens: if the SDK uses a fixed panel, this prevents edge overflow */
-@media (max-width: 420px) {
-  .chat-window * {
-    max-width: calc(100vw - 16px) !important;
+/* Mobile-specific fixes */
+@media (max-width: 768px) {
+  /* Ensure all Airia elements stay within viewport */
+  iframe[src*="airia"],
+  [class*="airia"], 
+  [id*="airia"] {
+    max-width: calc(100vw - 20px) !important;
+    margin-right: 10px !important;
+  }
+  
+  /* Handle fixed positioning chat widgets */
+  [style*="position: fixed"] {
+    right: 10px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+  
+  /* Prevent text overflow in main content */
+  .wrapper section {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  iframe[src*="airia"],
+  [class*="airia"], 
+  [id*="airia"] {
+    max-width: calc(100vw - 10px) !important;
+    margin-right: 5px !important;
+  }
+  
+  [style*="position: fixed"] {
+    right: 5px !important;
+    max-width: calc(100vw - 10px) !important;
   }
 }
 </style>
 
 <script>
-(function clamp(){
-  requestAnimationFrame(() => {
-    document.querySelectorAll('iframe, [class*="airia"], [id*="airia"]').forEach(el => {
-      el.style.boxSizing = 'border-box';
-      el.style.maxWidth = 'min(420px, 100vw)';
-      el.style.width = '100%';
+(function preventOverflow() {
+  function clampElements() {
+    // Target all potential Airia chat elements
+    const selectors = [
+      'iframe[src*="airia"]',
+      '[class*="airia"]', 
+      '[id*="airia"]',
+      '[style*="position: fixed"]'
+    ];
+    
+    selectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(el => {
+        const isMobile = window.innerWidth <= 768;
+        const isExtraSmall = window.innerWidth <= 480;
+        
+        el.style.boxSizing = 'border-box';
+        
+        if (isMobile) {
+          const margin = isExtraSmall ? '10px' : '20px';
+          el.style.maxWidth = `calc(100vw - ${margin})`;
+          
+          // Handle fixed positioned elements
+          const computedStyle = getComputedStyle(el);
+          if (computedStyle.position === 'fixed') {
+            el.style.right = isExtraSmall ? '5px' : '10px';
+          }
+        } else {
+          el.style.maxWidth = '420px';
+        }
+      });
     });
+  }
+  
+  // Run immediately and on resize
+  clampElements();
+  window.addEventListener('resize', clampElements);
+  
+  // Run when DOM changes (chat widget loads)
+  const observer = new MutationObserver(clampElements);
+  observer.observe(document.body, { 
+    childList: true, 
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['style', 'class', 'id']
   });
+  
+  // Also run on next frame to catch dynamically loaded content
+  requestAnimationFrame(clampElements);
 })();
 </script>
 
