@@ -8,99 +8,101 @@ TESTING ONLY: ZD POC
 To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
 
 <style>
-/* Mobile overflow prevention for Airia widget with Tailwind CSS */
+/* Nuclear approach - force viewport constraints at the highest level */
+html {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+}
+
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Force Jekyll wrapper to respect viewport */
+.wrapper {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+}
+
+.wrapper section {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+}
+
+/* Mobile-specific constraints */
 @media (max-width: 768px) {
-  /* Prevent horizontal scroll */
-  html, body {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-  }
-  
-  /* Target Airia widget container and elements */
-  #root,
-  #root *,
-  [style*="position: fixed"],
-  [class*="tw-"],
-  iframe[src*="airia"],
-  iframe[src*="embed"] {
-    max-width: calc(100vw - 20px) !important;
+  * {
     box-sizing: border-box !important;
   }
   
-  /* Handle fixed positioned chat elements */
-  [style*="position: fixed"][style*="bottom"],
-  [style*="position: fixed"][style*="right"] {
-    right: 10px !important;
-    max-width: calc(100vw - 20px) !important;
-  }
-}
-
-@media (max-width: 480px) {
-  #root,
-  #root *,
-  [style*="position: fixed"],
-  [class*="tw-"],
-  iframe[src*="airia"],
-  iframe[src*="embed"] {
-    max-width: calc(100vw - 15px) !important;
+  /* Aggressive clipping for mobile */
+  html, body, .wrapper {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
   
-  [style*="position: fixed"][style*="bottom"],
-  [style*="position: fixed"][style*="right"] {
-    right: 5px !important;
-    max-width: calc(100vw - 15px) !important;
+  /* Constrain any absolutely or fixed positioned elements */
+  *[style*="position: absolute"],
+  *[style*="position: fixed"] {
+    max-width: 100vw !important;
+    clip-path: inset(0 0 0 0) !important;
   }
 }
 </style>
 
 <script>
-(function preventAiriaOverflow() {
-  function constrainWidget() {
+(function forceViewportConstraints() {
+  function enforceConstraints() {
     const isMobile = window.innerWidth <= 768;
-    const isSmall = window.innerWidth <= 480;
     
     if (!isMobile) return;
     
-    // Target the root container and any elements that might overflow
-    const targets = [
-      '#root',
-      '#root *',
-      '[style*="position: fixed"]',
-      '[class*="tw-"]',
-      'iframe[src*="airia"]',
-      'iframe[src*="embed"]'
-    ];
+    // Force viewport constraints on everything
+    document.body.style.overflowX = 'hidden';
+    document.documentElement.style.overflowX = 'hidden';
     
-    targets.forEach(selector => {
-      document.querySelectorAll(selector).forEach(el => {
-        const margin = isSmall ? '15px' : '20px';
-        el.style.maxWidth = `calc(100vw - ${margin}) !important`;
-        el.style.boxSizing = 'border-box !important';
-        
-        // Handle fixed positioned elements (likely the chat widget)
-        const style = getComputedStyle(el);
-        if (style.position === 'fixed') {
-          el.style.right = `${isSmall ? '5px' : '10px'} !important`;
+    // Find and constrain any elements that extend beyond viewport
+    document.querySelectorAll('*').forEach(el => {
+      if (el.scrollWidth > window.innerWidth) {
+        el.style.maxWidth = '100vw';
+        el.style.overflowX = 'hidden';
+        el.style.boxSizing = 'border-box';
+      }
+      
+      // Force any fixed positioned elements to stay within bounds
+      const style = getComputedStyle(el);
+      if (style.position === 'fixed') {
+        el.style.maxWidth = '100vw';
+        if (style.right !== 'auto') {
+          el.style.right = '0px';
         }
-      });
+      }
     });
   }
   
-  // Run when widget loads
-  const observer = new MutationObserver(() => {
-    setTimeout(constrainWidget, 200);
-  });
-  
-  observer.observe(document.body, { 
+  // Run continuously to catch dynamic content
+  const observer = new MutationObserver(enforceConstraints);
+  observer.observe(document.documentElement, { 
     childList: true, 
     subtree: true,
-    attributes: true 
+    attributes: true,
+    attributeFilter: ['style', 'class']
   });
   
-  // Run on resize and initially
-  window.addEventListener('resize', constrainWidget);
-  constrainWidget();
-  requestAnimationFrame(constrainWidget);
+  window.addEventListener('resize', enforceConstraints);
+  window.addEventListener('load', enforceConstraints);
+  
+  // Run immediately and repeatedly
+  enforceConstraints();
+  setInterval(enforceConstraints, 500);
 })();
 </script>
 
