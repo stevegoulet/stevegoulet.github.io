@@ -8,46 +8,41 @@ TESTING ONLY: ZD POC
 To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
 
 <style>
-/* prevent page-wide horizontal scroll */
+/* never let the page create horizontal scroll */
 html, body { width:100%; overflow-x:hidden; }
 
-/* target your actual wrapper */
-.chat-window, #root {
+/* target only YOUR wrapper — do NOT touch #root */
+.chat-window {
   box-sizing: border-box;
-  position: fixed;        /* dock it like a chat launcher/panel */
-  right: 12px;
-  bottom: 12px;
-  width: min(380px, calc(100vw - 24px));  /* responsive width */
-  max-height: calc(100vh - 24px);
-  overflow: hidden;       /* keep inner content from spilling */
-  z-index: 9999;
+  /* keep it part of the normal flow; the SDK will float/dock the widget */
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
 }
 
-/* if the widget injects an iframe or inner container, make it fluid */
-.chat-window iframe, .chat-window > * {
+/* whatever the embed injects (iframe, divs), keep them fluid */
+.chat-window iframe,
+.chat-window > * {
   display: block;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
 }
 
-/* safety for very small screens */
-@media (max-width: 420px) {
-  .chat-window, #root {
-    right: 8px; bottom: 8px;
-    width: calc(100vw - 16px);
-    max-height: calc(100vh - 16px);
-    border-radius: 12px;
-  }
+/* belt-and-suspenders: long URLs/strings won't force overflow */
+.chat-window, .chat-window * {
+  word-break: break-word;
 }
 
-/* optional: avoid long strings forcing horizontal scroll in messages */
-.chat-window, .chat-window * { word-break: break-word; }
+/* tiny screens: if the SDK uses a fixed panel, this prevents edge overflow */
+@media (max-width: 420px) {
+  .chat-window * {
+    max-width: calc(100vw - 16px) !important;
+  }
+}
 </style>
 
-
-
-<div id="root"></div>
 <div class="chat-window">
 <script type="module">
   import AiriaChat from "https://chat.airia.ai/api/get-chat-embed";
