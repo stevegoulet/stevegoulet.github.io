@@ -8,19 +8,27 @@ TESTING ONLY: ZD POC
 To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
 
 <style>
-/* Target the specific chat button and any fixed positioned elements */
+/* Target the specific Radix UI elements causing overflow */
 @media (max-width: 768px) {
   /* Prevent page-level horizontal scroll */
   html, body {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+  }
+  
+  /* Target the problematic Radix focus guard spans */
+  span[data-radix-focus-guard],
+  span[data-radix-focus-guard][style*="position: fixed"] {
+    display: none !important;
+    visibility: hidden !important;
+    max-width: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
   }
   
   /* Target the chat button specifically */
   button[aria-haspopup="dialog"],
   button[type="button"][class*="inline-flex"],
-  button[class*="rounded-full"],
-  [data-state="open"],
-  [aria-expanded="true"] {
+  button[class*="rounded-full"] {
     position: fixed !important;
     right: 10px !important;
     bottom: 20px !important;
@@ -33,7 +41,7 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
   [aria-controls*="radix"],
   [role="dialog"],
   [data-state="open"] + div,
-  div[style*="position: fixed"] {
+  div[style*="position: fixed"]:not(span[data-radix-focus-guard]) {
     max-width: calc(100vw - 20px) !important;
     right: 10px !important;
     box-sizing: border-box !important;
@@ -50,7 +58,7 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
   
   [aria-controls*="radix"],
   [role="dialog"],
-  div[style*="position: fixed"] {
+  div[style*="position: fixed"]:not(span[data-radix-focus-guard]) {
     max-width: calc(100vw - 10px) !important;
     right: 5px !important;
   }
