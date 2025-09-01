@@ -8,7 +8,7 @@ TESTING ONLY: ZD POC
 To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
 
 <style>
-.chat-window {
+.chat-container {
   max-width: 100%;
   overflow-x: auto;
   box-sizing: border-box;
