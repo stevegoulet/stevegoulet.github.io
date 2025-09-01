@@ -29,7 +29,6 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
     imageSize: "small",
     imageBgColor: "#FFFFFF"
   });
-  </div>
 </script>
-
+</div>
 
