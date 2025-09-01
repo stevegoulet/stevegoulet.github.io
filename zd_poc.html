@@ -5,25 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 /* No horizontal page scroll */
-html, body { width: 100%; overflow-x: hidden; }
+html, body { width: 100%; overflow-x: hidden !important; max-width: 100vw !important; }
 
 /* Let normal content be fluid */
 .chat-window { box-sizing: border-box; width: 100%; max-width: 100%; }
 
-/* Mobile: keep any Airia/“chat” elements inside the viewport */
-@media (max-width: 480px) {
+/* Target the problematic Radix focus guard spans */
+span[data-radix-focus-guard] {
+  display: none !important;
+  visibility: hidden !important;
+  position: static !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Mobile: keep any Airia/"chat" elements inside the viewport */
+@media (max-width: 768px) {
   iframe[src*="airia.ai"],
   [id*="airia"], [class*="airia"] {
     box-sizing: border-box !important;
-    max-width: 100vw !important;    /* cap only */
-    /* no width here; avoid stretching fixed panels full-width */
+    max-width: calc(100vw - 20px) !important;
   }
 
   /* Generic guard for fixed bottom-right panels */
   * {
-    /* long strings shouldn't force width */
     word-break: break-word;
     overflow-wrap: anywhere;
+    box-sizing: border-box !important;
+  }
+  
+  /* Force any fixed positioned elements to stay within bounds */
+  *[style*="position: fixed"] {
+    max-width: calc(100vw - 20px) !important;
+    right: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  iframe[src*="airia.ai"],
+  [id*="airia"], [class*="airia"] {
+    max-width: calc(100vw - 15px) !important;
+  }
+  
+  *[style*="position: fixed"] {
+    max-width: calc(100vw - 15px) !important;
+    right: 5px !important;
   }
 }
 </style>
@@ -44,34 +70,60 @@ html, body { width: 100%; overflow-x: hidden; }
     </script>
 <script>
 (function () {
-  const clampOnce = (root = document) => {
-    // Cap obvious Airia elems
-    const sel = 'iframe[src*="airia.ai"], [id*="airia"], [class*="airia"]';
-    root.querySelectorAll(sel).forEach(el => {
-      const cs = getComputedStyle(el);
-      el.style.boxSizing = 'border-box';
-      el.style.maxWidth  = '100vw';
+  function preventOverflow() {
+    const isMobile = window.innerWidth <= 768;
+    
+    // Remove problematic Radix focus guard spans
+    document.querySelectorAll('span[data-radix-focus-guard]').forEach(span => {
+      span.remove();
+    });
+    
+    if (!isMobile) return;
+    
+    // Target Airia elements and any fixed positioned elements
+    const selectors = [
+      'iframe[src*="airia.ai"]',
+      '[id*="airia"]', 
+      '[class*="airia"]',
+      '*[style*="position: fixed"]'
+    ];
+    
+    selectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        const cs = getComputedStyle(el);
+        const isSmall = window.innerWidth <= 480;
+        const margin = isSmall ? '15px' : '20px';
+        
+        el.style.boxSizing = 'border-box';
+        el.style.maxWidth = `calc(100vw - ${margin})`;
 
-      // If it's fixed in the corner, anchor to the right and don't force full width
-      if (cs.position === 'fixed' && cs.bottom !== 'auto' && cs.right !== 'auto') {
-        el.style.right     = '8px';
-        el.style.left      = 'auto';
-        el.style.maxWidth  = 'calc(100vw - 16px)'; // gutter
-        // DO NOT set el.style.width here (prevents the "too far left" look)
+        // If it's fixed positioned, adjust the right positioning
+        if (cs.position === 'fixed') {
+          el.style.right = isSmall ? '5px' : '10px';
+          el.style.left = 'auto';
+        }
+      });
+    });
+
+    // Walk shadow roots if they exist
+    document.querySelectorAll('*').forEach(el => {
+      if (el.shadowRoot) {
+        preventOverflow();
       }
     });
+  }
 
-    // Walk open shadow roots (some widgets use Shadow DOM)
-    root.querySelectorAll('*').forEach(el => {
-      if (el.shadowRoot) clampOnce(el.shadowRoot);
-    });
-  };
-
-  // Run now, on next frame (corrected rAF), and on DOM changes
-  clampOnce();
-  requestAnimationFrame(() => clampOnce());
-  new MutationObserver(() => clampOnce())
-    .observe(document.documentElement, { childList: true, subtree: true });
+  // Run immediately, on resize, and on DOM changes
+  preventOverflow();
+  window.addEventListener('resize', preventOverflow);
+  requestAnimationFrame(preventOverflow);
+  
+  const observer = new MutationObserver(preventOverflow);
+  observer.observe(document.documentElement, { 
+    childList: true, 
+    subtree: true,
+    attributes: true 
+  });
 })();
 </script>
   </body>
