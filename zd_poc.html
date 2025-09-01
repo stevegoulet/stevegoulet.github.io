@@ -69,61 +69,21 @@ span[data-radix-focus-guard] {
                         
     </script>
 <script>
-(function () {
-  function preventOverflow() {
-    const isMobile = window.innerWidth <= 768;
-    
-    // Remove problematic Radix focus guard spans
-    document.querySelectorAll('span[data-radix-focus-guard]').forEach(span => {
-      span.remove();
-    });
-    
-    if (!isMobile) return;
-    
-    // Target Airia elements and any fixed positioned elements
-    const selectors = [
-      'iframe[src*="airia.ai"]',
-      '[id*="airia"]', 
-      '[class*="airia"]',
-      '*[style*="position: fixed"]'
-    ];
-    
-    selectors.forEach(sel => {
-      document.querySelectorAll(sel).forEach(el => {
-        const cs = getComputedStyle(el);
-        const isSmall = window.innerWidth <= 480;
-        const margin = isSmall ? '15px' : '20px';
-        
-        el.style.boxSizing = 'border-box';
-        el.style.maxWidth = `calc(100vw - ${margin})`;
-
-        // If it's fixed positioned, adjust the right positioning
-        if (cs.position === 'fixed') {
-          el.style.right = isSmall ? '5px' : '10px';
-          el.style.left = 'auto';
-        }
-      });
-    });
-
-    // Walk shadow roots if they exist
-    document.querySelectorAll('*').forEach(el => {
-      if (el.shadowRoot) {
-        preventOverflow();
-      }
-    });
+// Try to trigger resize recalculation on mobile
+(function() {
+  function triggerResize() {
+    if (window.innerWidth <= 768) {
+      // Dispatch multiple resize events to force recalculation
+      window.dispatchEvent(new Event('resize'));
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 1000);
+    }
   }
-
-  // Run immediately, on resize, and on DOM changes
-  preventOverflow();
-  window.addEventListener('resize', preventOverflow);
-  requestAnimationFrame(preventOverflow);
   
-  const observer = new MutationObserver(preventOverflow);
-  observer.observe(document.documentElement, { 
-    childList: true, 
-    subtree: true,
-    attributes: true 
-  });
+  // Wait for widget to load then trigger resizes
+  setTimeout(triggerResize, 2000);
+  setTimeout(triggerResize, 5000);
 })();
 </script>
   </body>
