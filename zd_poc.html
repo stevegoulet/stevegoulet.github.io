@@ -3,38 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-/* never allow horizontal scroll */
-html, body { width:100%; overflow-x:hidden; }
+   <style>
+    html, body { width:100%; overflow-x:hidden; }  /* hard stop on sideways scroll */
 
-/* if you use a wrapper, keep it fluid */
-.chat-window, #airia-embed, #airia-container {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-}
+    @media (max-width: 480px) {
+      /* Common Airia markers + any fixed bottom-right panel */
+      iframe[src*="airia.ai"],
+      [id*="airia"], [class*="airia"] {
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+      }
+      /* last-resort guard for fixed chat panels */
+      *[style*="position: fixed"][style*="bottom"][style*="right"] {
+        box-sizing: border-box !important;
+        width: min(380px, 100vw - 16px) !important;
+        max-width: 100vw !important;
+        right: 8px !important; left: auto !important;
+        border-radius: 12px;
+      }
+    }
+    </style>
 
-/* phone-specific clamps for injected widgets */
-@media (max-width: 480px) {
-  /* anything clearly from Airia */
-  iframe[src*="airia.ai"],
-  [id*="airia"], [class*="airia"] {
-    box-sizing: border-box !important;
-    width: 100% !important;
-    max-width: 100vw !important;
-  }
-  /* common pattern: fixed bottom-right panel */
-  *[style*="position: fixed"][style*="bottom"][style*="right"] {
-    box-sizing: border-box !important;
-    width: min(380px, 100vw - 16px) !important;
-    max-width: 100vw !important;
-    right: 8px !important; left: auto !important;
-    border-radius: 12px; /* optional nicety */
-  }
-  /* long words/URLs shouldn’t widen bubbles */
-  .chat-window, .chat-window * { overflow-wrap: anywhere; word-break: break-word; }
-}
-</style>
     <title>Airia Embed</title>
   </head>
   <body>
@@ -50,19 +40,47 @@ html, body { width:100%; overflow-x:hidden; }
                         imageBgColor: "#FFFFFF"})
                         
     </script>
-    <script>
-        (function clampAiria() {
-          const clamp = () => {
-            document.querySelectorAll('iframe[src*="airia.ai"], [id*="airia"], [class*="airia"]').forEach(el => {
-              el.style.boxSizing = 'border-box';
-              el.style.maxWidth  = '100vw';
-              el.style.width     = '100%';
-            });
-          };
-          // run soon, and again after dynamic mounts
-          clamp();
-          new MutationObserver(clamp).observe(document.documentElement, { childList: true, subtree: true });
-        })();
-        </script>
+  <script>
+(function () {
+  const applyClamp = (root = document) => {
+    const sel = 'iframe[src*="airia.ai"], [id*="airia"], [class*="airia"]';
+    root.querySelectorAll(sel).forEach(el => {
+      el.style.boxSizing = 'border-box';
+      el.style.maxWidth  = '100vw';
+      el.style.width     = '100%';
+      // If this is a fixed panel, keep it inside on phones
+      const cs = getComputedStyle(el);
+      if (cs.position === 'fixed' && /auto|^$/.test(cs.left) && cs.right !== 'auto') {
+        el.style.right = '8px';
+        el.style.left  = 'auto';
+        el.style.maxWidth = 'calc(100vw - 16px)';
+      }
+    });
+
+    // also clamp any fixed bottom-right elements (generic safety)
+    root.querySelectorAll('*').forEach(el => {
+      const cs = getComputedStyle(el);
+      if (cs.position === 'fixed' && cs.bottom !== 'auto' && cs.right !== 'auto') {
+        el.style.boxSizing = 'border-box';
+        el.style.maxWidth = '100vw';
+        el.style.width = 'min(380px, 100vw - 16px)';
+        el.style.right = '8px';
+        el.style.left = 'auto';
+      }
+    });
+
+    // walk open shadow roots (many widgets use Shadow DOM)
+    root.querySelectorAll('*').forEach(el => {
+      if (el.shadowRoot) applyClamp(el.shadowRoot);
+    });
+  };
+
+  // run now, after next frame, and watch for dynamic mounts
+  applyClamp();
+  requestAnimationFrame(applyClamp);
+  new MutationObserver(() => applyClamp()).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+
   </body>
 </html>
