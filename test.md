@@ -10,6 +10,26 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
 <div class="chat-container" style="position: relative; overflow: hidden; max-width: 100vw; width: 100%; box-sizing: border-box;">
   <div id="root"></div>
 </div>
+
+<script>
+// Remove problematic Radix focus guard spans
+(function removeFocusGuards() {
+  function removeSpans() {
+    document.querySelectorAll('span[data-radix-focus-guard]').forEach(span => {
+      span.remove();
+    });
+  }
+  
+  // Run immediately and on DOM changes
+  removeSpans();
+  const observer = new MutationObserver(removeSpans);
+  observer.observe(document.body, { childList: true, subtree: true });
+  
+  // Also run periodically
+  setInterval(removeSpans, 100);
+})();
+</script>
+
 <script type="module">
   import AiriaChat from "https://chat.airia.ai/api/get-chat-embed";
   AiriaChat.init({
