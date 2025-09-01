@@ -13,28 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
     {% include head-custom.html %}
-    <style>
-      /* Mobile overflow prevention for chat widgets */
-      @media screen and (max-width: 768px) {
-        html, body {
-          overflow-x: hidden !important;
-          max-width: 100vw !important;
-        }
-        .wrapper {
-          width: 100% !important;
-          max-width: 100vw !important;
-          overflow-x: hidden !important;
-        }
-        /* Hide the problematic Radix focus guard spans that cause overflow */
-        span[data-radix-focus-guard] {
-          display: none !important;
-          visibility: hidden !important;
-          position: static !important;
-          width: 0 !important;
-          height: 0 !important;
-        }
-      }
-    </style>
   </head>
   <body>
     <div class="wrapper">
