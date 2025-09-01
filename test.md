@@ -9,118 +9,189 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
 
 
 <style>
-/* Prevent horizontal scroll on page */
-html, body { 
-  width: 100%; 
-  overflow-x: hidden; 
-  margin: 0;
-  padding: 0;
-}
-
-/* Ensure main content doesn't cause overflow */
-.wrapper {
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-/* Target Airia chat elements directly */
-iframe[src*="airia"],
-[class*="airia"], 
-[id*="airia"] {
+/* Force no horizontal scroll globally - highest priority */
+* {
+  max-width: 100% !important;
   box-sizing: border-box !important;
+}
+
+html, body { 
+  width: 100% !important; 
+  overflow-x: hidden !important; 
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Override Jekyll theme wrapper constraints */
+.wrapper {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.wrapper header,
+.wrapper section,
+.wrapper footer {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Aggressive Airia chat element targeting */
+iframe,
+iframe[src*="airia"],
+iframe[src*="embed"],
+[class*="airia"], 
+[id*="airia"],
+[class*="chat"],
+[id*="chat"],
+div[style*="position: fixed"],
+div[style*="bottom"],
+div[style*="right"] {
   max-width: 100vw !important;
-  word-break: break-word;
+  box-sizing: border-box !important;
+  word-break: break-word !important;
+  overflow: hidden !important;
 }
 
-/* Mobile-specific fixes */
+/* Mobile viewport constraints - apply to everything */
 @media (max-width: 768px) {
-  /* Ensure all Airia elements stay within viewport */
+  /* Nuclear option - constrain everything */
+  * {
+    max-width: calc(100vw - 10px) !important;
+  }
+  
+  /* Specific overrides for common fixed elements */
+  iframe,
   iframe[src*="airia"],
   [class*="airia"], 
-  [id*="airia"] {
+  [id*="airia"],
+  div[style*="position: fixed"] {
     max-width: calc(100vw - 20px) !important;
-    margin-right: 10px !important;
-  }
-  
-  /* Handle fixed positioning chat widgets */
-  [style*="position: fixed"] {
     right: 10px !important;
-    max-width: calc(100vw - 20px) !important;
+    width: auto !important;
   }
   
-  /* Prevent text overflow in main content */
-  .wrapper section {
-    max-width: 100%;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+  /* Ensure Jekyll wrapper doesn't interfere */
+  .wrapper {
+    width: 100% !important;
+    max-width: calc(100vw - 10px) !important;
+    margin: 0 5px !important;
+    padding: 0 !important;
+  }
+  
+  .wrapper header,
+  .wrapper section,
+  .wrapper footer {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 }
 
-/* Extra small screens */
+/* Extra aggressive mobile constraints */
 @media (max-width: 480px) {
-  iframe[src*="airia"],
-  [class*="airia"], 
-  [id*="airia"] {
-    max-width: calc(100vw - 10px) !important;
-    margin-right: 5px !important;
+  * {
+    max-width: calc(100vw - 5px) !important;
   }
   
-  [style*="position: fixed"] {
+  iframe,
+  iframe[src*="airia"],
+  [class*="airia"], 
+  [id*="airia"],
+  div[style*="position: fixed"] {
+    max-width: calc(100vw - 15px) !important;
     right: 5px !important;
-    max-width: calc(100vw - 10px) !important;
+    width: auto !important;
+  }
+  
+  .wrapper {
+    max-width: calc(100vw - 5px) !important;
+    margin: 0 2px !important;
   }
 }
 </style>
 
 <script>
-(function preventOverflow() {
-  function clampElements() {
-    // Target all potential Airia chat elements
-    const selectors = [
-      'iframe[src*="airia"]',
-      '[class*="airia"]', 
-      '[id*="airia"]',
-      '[style*="position: fixed"]'
-    ];
+(function forceNoOverflow() {
+  function aggressiveClamp() {
+    const isMobile = window.innerWidth <= 768;
+    const isExtraSmall = window.innerWidth <= 480;
     
-    selectors.forEach(selector => {
-      document.querySelectorAll(selector).forEach(el => {
-        const isMobile = window.innerWidth <= 768;
-        const isExtraSmall = window.innerWidth <= 480;
-        
+    // Nuclear option - constrain ALL elements
+    document.querySelectorAll('*').forEach(el => {
+      if (isMobile) {
+        const margin = isExtraSmall ? '5px' : '10px';
+        el.style.maxWidth = `calc(100vw - ${margin})`;
         el.style.boxSizing = 'border-box';
         
-        if (isMobile) {
-          const margin = isExtraSmall ? '10px' : '20px';
-          el.style.maxWidth = `calc(100vw - ${margin})`;
-          
-          // Handle fixed positioned elements
-          const computedStyle = getComputedStyle(el);
-          if (computedStyle.position === 'fixed') {
-            el.style.right = isExtraSmall ? '5px' : '10px';
-          }
-        } else {
-          el.style.maxWidth = '420px';
+        // Force overflow handling
+        if (el.scrollWidth > el.clientWidth) {
+          el.style.overflow = 'hidden';
+          el.style.overflowX = 'hidden';
+        }
+      }
+    });
+    
+    // Specific targeting for chat/iframe elements
+    const chatSelectors = [
+      'iframe',
+      'iframe[src*="airia"]',
+      'iframe[src*="embed"]',
+      '[class*="airia"]', 
+      '[id*="airia"]',
+      '[class*="chat"]',
+      '[id*="chat"]',
+      'div[style*="position: fixed"]',
+      'div[style*="bottom"]',
+      'div[style*="right"]'
+    ];
+    
+    chatSelectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(el => {
+        el.style.maxWidth = isMobile ? 
+          `calc(100vw - ${isExtraSmall ? '15px' : '20px'}) !important` : 
+          '420px !important';
+        el.style.boxSizing = 'border-box !important';
+        el.style.overflow = 'hidden !important';
+        
+        if (getComputedStyle(el).position === 'fixed') {
+          el.style.right = isExtraSmall ? '5px !important' : '10px !important';
+          el.style.width = 'auto !important';
         }
       });
     });
   }
   
-  // Run immediately and on resize
-  clampElements();
-  window.addEventListener('resize', clampElements);
+  // Run immediately
+  aggressiveClamp();
   
-  // Run when DOM changes (chat widget loads)
-  const observer = new MutationObserver(clampElements);
-  observer.observe(document.body, { 
-    childList: true, 
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['style', 'class', 'id']
+  // Run on window resize
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(aggressiveClamp, 100);
   });
   
-  // Also run on next frame to catch dynamically loaded content
-  requestAnimationFrame(clampElements);
+  // Run when DOM changes
+  const observer = new MutationObserver(() => {
+    setTimeout(aggressiveClamp, 100);
+  });
+  observer.observe(document.documentElement, { 
+    childList: true, 
+    subtree: true,
+    attributes: true
+  });
+  
+  // Run periodically to catch dynamic content
+  setInterval(aggressiveClamp, 1000);
+  
+  // Run on next frame
+  requestAnimationFrame(aggressiveClamp);
 })();
 </script>
 
