@@ -15,7 +15,7 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
     pipelineId: "8e803d5a-4996-4dfc-b4eb-cf79430fcaeb",
     apiKey: "ak-MjQzMzQ2Nzk1OXwxNzU2Njc4MTE5ODI4fHRpLVRXVnVkR0YyYVNCSVpXRnNkR2d0VDNCbGJpQlNaV2RwYzNSeVlYUnBiMjR0VUhKdlptVnpjMmx2Ym1Gc3wxfDEwMDM4NDI4NSAg",
     apiUrl: "https://embed-api.airia.ai",
-    greeting: "Hi there. Welcome to the TESTING ONLY Mentavi Health support bot. How can I assist you today?",
+    greeting: "Hi there. Welcome to the TESTING ONLY bot!",
     imagePath: "/images/logo-header.png",
     imageSize: "small",
     imageBgColor: "#FFFFFF"
