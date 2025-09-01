@@ -69,5 +69,4 @@ html, body { width:100%; overflow-x:hidden; }
     imageBgColor: "#FFFFFF"
   });
 </script>
-</div>
 
