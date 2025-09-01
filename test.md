@@ -7,6 +7,19 @@ TESTING ONLY: ZD POC
 
 To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
 
+<script>
+(function clamp(){
+  requestAnimationFrame(() => {
+    document.querySelectorAll('iframe, [class*="airia"], [id*="airia"]').forEach(el => {
+      el.style.boxSizing = 'border-box';
+      el.style.maxWidth = 'min(420px, 100vw)';
+      el.style.width = '100%';
+    });
+  });
+})();
+</script>
+
+
 <style>
 /* never let the page create horizontal scroll */
 html, body { width:100%; overflow-x:hidden; }
