@@ -9,31 +9,29 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
 
 <a href="/test?openSupport=1">Contact support</a>
 
-
-<script>
-  (function () {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('openSupport') === '1') {
-      zE(function () {
-        // 'open' exists; 'toggle' also works if you prefer
-        zE('webWidget', 'open');
-      });
-    }
-  })();
-</script>
-
 <script>
   window.zESettings = {
     webWidget: {
-      helpCenter: { suppress: true },
-      contactForm: { suppress: true },
-      chat: { suppress: true },
-      talk: { suppress: true },
-      answerBot: { suppress: true }
+      launcher: { labelVisible: false } // hide the badge/launcher by default
+      // don't suppress channels here
     }
   };
 </script>
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=023ec2cb-f199-48ed-b908-fc31a374dcd8"> </script>
+
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=023ec2cb-f199-48ed-b908-fc31a374dcd8"></script>
+
+<script>
+  zE(function () {
+    const params = new URLSearchParams(location.search);
+    if (params.get('openSupport') === '1') {
+      zE('webWidget', 'show');  // IMPORTANT: make visible first
+      zE('webWidget', 'open');  // then open it
+    } else {
+      zE('webWidget', 'hide');  // keep it hidden on normal loads
+    }
+  });
+</script>
+
 
 <div id="root"></div>
 
