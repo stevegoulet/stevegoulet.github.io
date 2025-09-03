@@ -7,7 +7,11 @@ TESTING ONLY: ZD POC
 
 To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
 
-<a href="/contact?openSupport=1">Contact support</a>
+<a href="/?openSupport=1">Contact support</a>
+
+<script>
+  zE('webWidget', 'hide');
+</script>
 
 <script>
   (function () {
@@ -20,12 +24,6 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
     }
   })();
 </script>
-
-
-<script>
-  zE('messenger', 'hide');
-</script>
-
 
 <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=023ec2cb-f199-48ed-b908-fc31a374dcd8"> </script>
 
