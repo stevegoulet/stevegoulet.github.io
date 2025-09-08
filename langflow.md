@@ -31,18 +31,13 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
 </script>
 
 
-<div id="root"></div>
-
-<script type="module">
-  import AiriaChat from "https://chat.airia.ai/api/get-chat-embed";
-  AiriaChat.init({
-    pipelineId: "8e803d5a-4996-4dfc-b4eb-cf79430fcaeb",
-    apiKey: "ak-MjQzMzQ2Nzk1OXwxNzU2Njc4MTE5ODI4fHRpLVRXVnVkR0YyYVNCSVpXRnNkR2d0VDNCbGJpQlNaV2RwYzNSeVlYUnBiMjR0VUhKdlptVnpjMmx2Ym1Gc3wxfDEwMDM4NDI4NSAg",
-    apiUrl: "https://embed-api.airia.ai",
-    greeting: "Hi there. Welcome to the TESTING ONLY Mentavi Health support bot. How can I assist you today?",
-    imagePath: "/images/logo-header.png",
-    imageSize: "small",
-    imageBgColor: "#FFFFFF"
-  });
+<script
+  src="https://cdn.jsdelivr.net/gh/logspace-ai/langflow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js">
 </script>
+  <langflow-chat
+    window_title="Simple Agent"
+    flow_id="84ab45b3-0ea8-4fa2-9aa5-3ccc344ad710"
+    host_url="https://langflow.mentavi.com"
+    api_key="...">
+</langflow-chat>
 
