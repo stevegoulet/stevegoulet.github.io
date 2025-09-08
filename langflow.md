@@ -38,6 +38,6 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
     window_title="Simple Agent"
     flow_id="84ab45b3-0ea8-4fa2-9aa5-3ccc344ad710"
     host_url="https://langflow.mentavi.com"
-    api_key="...">
+    api_key="sk-c5LYVCQL7MQ9bkqxlx-MsFCZcFUUB8f1BL7Sk8zM7a8">
 </langflow-chat>
 
