@@ -2,11 +2,7 @@
 layout: default
 permalink: /langflow/
 ---
-
 TESTING ONLY: ZD POC
-
-To test the POC, click or select the Mentavi Logo in the lower right corner of this screen.
-
 <script>
   window.zESettings = {
     webWidget: {
@@ -15,9 +11,7 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
     }
   };
 </script>
-
 <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=023ec2cb-f199-48ed-b908-fc31a374dcd8"></script>
-
 <script>
   zE(function () {
     const params = new URLSearchParams(location.search);
@@ -29,8 +23,6 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
     }
   });
 </script>
-
-
 <script
   src="https://cdn.jsdelivr.net/gh/logspace-ai/langflow-embedded-chat@v1.0.7/dist/build/static/js/bundle.min.js">
 </script>
