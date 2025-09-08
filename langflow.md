@@ -48,7 +48,7 @@ To test the POC, click or select the Mentavi Logo in the lower right corner of t
         "fontFamily": "Georgia, serif",
         "padding": "16px"
         }
-    height="600"
+    height="400"
     width="400"
 </langflow-chat>
 
