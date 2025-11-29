@@ -3,7 +3,7 @@ layout: default
 ---
 I am a healthcare technology executive with over 20 years of experience leading digital health transformations. Proven expertise in artificial intelligence including leadership, governance, architecture, engineering and execution of generative AI and ML applications. Custom application implementation across diverse healthcare settings. Adept at managing technology and product teams, aligning IT and clinical operations, and delivering measurable gains in reliability, performance, and outcomes.
 
-In my role at [Mentavi](https://mentavi.com) I lead the design, engineering and delivery of AI driven B2B and D2C behavioral healthcare products.  
+In my role at [Mentavi](https://mentavi.com) I lead the design, engineering and delivery of AI driven behavioral healthcare products.  
 
 ![Photo of Steve Goulet at Sleeping Bear](images/steve-headshot.png "Steve Goulet at Sleeping Bear National Lakeshore in West Michigan")
 
