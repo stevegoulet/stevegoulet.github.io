@@ -6,17 +6,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Jekyll-based personal website/portfolio for Steve Goulet, hosted on GitHub Pages. The site showcases professional experience in healthcare technology and includes integration with Airia AI chat functionality for support demonstrations.
 
+## Repository Structure
+
+This Public/ directory is a **separate git repository** nested within a larger Obsidian vault:
+
+- **This repo**: `https://github.com/stevegoulet/stevegoulet.github.io` (GitHub Pages site)
+- **Parent vault**: `https://github.com/stevegoulet/obsidian.git` (private Obsidian vault)
+- **Parent vault .gitignore**: Excludes `/Public/` so this nested repo is independent
+
+### Working with This Repo
+
+When working in the Public/ directory:
+```bash
+cd /Users/stevegoulet/Obsidian\ Vault/Public
+git status  # Shows status of the Public repo only
+git push origin main  # Pushes to stevegoulet.github.io
+```
+
+The parent Obsidian vault tracks all other content but ignores this directory entirely.
+
 ## Development Commands
 
 ### Building and Serving
-- **Build**: `jekyll build --source ./Public --destination ./_site`
+- **Build**: `jekyll build --destination ./_site` (run from Public/ directory)
 - **Local development**: `jekyll serve` (if Jekyll is installed locally)
 - **Ruby setup**: `gem install bundler && gem install jekyll`
 
 ### Deployment
-- Automatic deployment via GitHub Actions on push to `main` branch
-- Deployment workflow defined in `deploy.yml`
-- Site builds from `./Public` directory and publishes to `gh-pages` branch
+- Automatic deployment via GitHub Pages built-in Jekyll processing
+- Pushes to `main` branch automatically trigger GitHub Pages build
+- Site is published to `stevegoulet.github.io`
 
 ## Architecture
 
@@ -45,5 +64,6 @@ The site includes Airia AI chat functionality for testing/demo purposes:
 
 - `zd_poc.html`: Standalone HTML file for ZenDesk proof-of-concept chat integration
 - `test.md`: Jekyll page for testing chat functionality with additional mobile-specific CSS
-- `deploy.yml`: GitHub Actions workflow for automated deployment
+- `CLAUDE.md`: This file - provides context about the repository structure and workflow
 - `images/`: Contains professional headshots and company logos used throughout the site
+- `.gitignore`: Excludes system files (.DS_Store) and IDE files (.idea/) from this repo
