@@ -1,8 +1,6 @@
 ---
 layout: default
 ---
-About Me
-<br><br>
 I am a healthcare technology executive with over 20 years of experience leading digital health transformations: 
 - Proven expertise in artificial intelligence including leadership, governance, architecture, engineering and execution of both generative AI and ML applications.
 - Custom application implementation across diverse healthcare settings.
